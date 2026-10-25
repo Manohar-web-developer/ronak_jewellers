@@ -57,9 +57,9 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
 
     try {
-        const { mobile, password, email } = req.body;
+        const { password, email } = req.body;
 
-        if (!mobile || !password || !email) {
+        if (!password || !email) {
             return res.status(400).json({
                 status: false,
                 message: "All fields are required"
@@ -69,14 +69,13 @@ export const login = async (req, res) => {
         const formattedEmail = email.toLowerCase().trim()
         const AdminFind = await AdminModel.findOne({
             email: formattedEmail,
-            mobile: mobile,
             isActive: true
         })
 
         if (!AdminFind) {
             return res.status(400).json({
                 status: false,
-                message: "Email / Mobile Not Valied "
+                message: "Email  Not Valied "
             })
         }
         const checkPassword = await bcrypt.compare(password, AdminFind.passwordHash)
@@ -109,6 +108,7 @@ export const login = async (req, res) => {
         return res.status(500).json({
             status: false,
             message: "Internal Error"
+
         })
     }
 
